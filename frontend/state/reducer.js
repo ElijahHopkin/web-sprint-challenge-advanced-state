@@ -40,7 +40,7 @@ export function quiz(state = initialQuizState, action) {
   }
 }
 
-const initialSelectedAnswerState = []
+const initialSelectedAnswerState = null
 export function selectedAnswer(state = initialSelectedAnswerState, action) {
   switch(action.type) {
     case SET_SELECTED_ANSWER:
@@ -71,8 +71,10 @@ export function form(state = initialFormState, action) {
     case INPUT_CHANGE:
       return ({
         ...state,
-        [action.payload.name]: action.payload.value
+        [action.payload.id]: action.payload.value
       })
+      case RESET_FORM:
+        return initialFormState
     default:
       return state
   }

@@ -3,39 +3,78 @@ import { connect } from 'react-redux'
 import * as actionCreators from '../state/action-creators'
 
 export function Form(props) {
+  const {postQuiz, inputChange, form} = props
   console.log(props.form)
 
   const [disabled, setDisabled] = useState(true)
 
   useEffect(() => {
     const {newFalseAnswer, newQuestion, newTrueAnswer} = props.form
-    if(newFalseAnswer&& newQuestion && newTrueAnswer){
-      setDisabled(!disabled)
+
+    if(newFalseAnswer.trim().length>1 &&
+     newQuestion.trim().length>1  &&
+     newTrueAnswer.trim().length>1){
+      setDisabled(false)
+    }else{
+      setDisabled(true)
     }
   }, [props.form])
-  
-  const {postQuiz, inputChange, resetForm, form} = props
 
   const onChange = evt => {
-    const {name, value} = evt.target
-    inputChange(name, value)
+    const {id, value} = evt.target
+    inputChange(id, value)
   }
 
-  const onSubmit = evt => {
+  const onSubmit = (evt) => {
       evt.preventDefault()
-      postQuiz();
-      resetForm()
+      postQuiz({
+        question_text: form.newQuestion,
+        true_answer_text: form.newTrueAnswer,
+        false_answer_text: form.newFalseAnswer
+      });
+      
   }
 
   return (
     <form id="form" onSubmit={onSubmit}>
       <h2>Create New Quiz</h2>
-      <input maxLength={50} onChange={onChange} id="newQuestion" value= {form.value} placeholder="Enter question" />
-      <input maxLength={50} onChange={onChange} id="newTrueAnswer" value= {form.value} placeholder="Enter true answer" />
-      <input maxLength={50} onChange={onChange} id="newFalseAnswer" value= {form.value} placeholder="Enter false answer" />
-      <button id="submitNewQuizBtn"disabled= {disabled}>Submit new quiz</button>
+      <input 
+      maxLength={50} 
+      onChange={onChange} 
+      name = "newQuestion" 
+      id="newQuestion" 
+      value= {form.newQuestion} 
+      placeholder="Enter question" 
+      />
+      <input 
+      maxLength={50} 
+      onChange={onChange} 
+      name = "newTrueAnswer" 
+      id="newTrueAnswer" 
+      value= {form.newTrueAnswer} 
+      placeholder="Enter true answer" 
+      />
+      <input 
+      maxLength={50} 
+      onChange={onChange} 
+      name = "newFalseAnswer" 
+      id="newFalseAnswer" 
+      value= {form.newFalseAnswer} 
+      placeholder="Enter false answer" 
+      />
+      <button 
+      id="submitNewQuizBtn"
+      disabled= {disabled}
+      >Submit new quiz
+      </button>
     </form>
   )
 }
 
-export default connect(st => st, actionCreators)(Form)
+const mapStateToProps =state => {
+  return{
+    form: state.form
+  }
+}
+
+export default connect(mapStateToProps, actionCreators)(Form)

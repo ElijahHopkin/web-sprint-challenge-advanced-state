@@ -12,26 +12,24 @@ import {
 export function moveClockwise() { 
   return({type: MOVE_CLOCKWISE})
 }
-
 export function moveCounterClockwise() {
   return({type: MOVE_COUNTERCLOCKWISE})
  }
+ export function setMessage(message) { 
+   return({type: SET_INFO_MESSAGE, payload: message})
+ 
+ }
+ export function inputChange(id, value) {
+   return({ type: INPUT_CHANGE, payload: {id, value}})
+  }
+  export function setQuiz(quizData) { 
+    return{type:SET_QUIZ_INTO_STATE, payload:(quizData)}
+  }
 
-export function selectAnswer(quiz_id, answer_id) {
-  return({type: SET_SELECTED_ANSWER, payload: {quiz_id, answer_id}})
+export function selectAnswer(answer) {
+  return{type: SET_SELECTED_ANSWER, payload: answer}
  }
 
-export function setMessage(message) { 
-  return({type: SET_INFO_MESSAGE, payload: message})
-
-}
-
-export function setQuiz() { }
-
-//form
-export function inputChange(name, value) {
-  return({ type: INPUT_CHANGE, payload: {name, value}})
- }
 //form
 export function resetForm() { 
   return({type: RESET_FORM})
@@ -42,8 +40,7 @@ export function fetchQuiz() {
   return function (dispatch) {
     axios.get('http://localhost:9000/api/quiz/next')
     .then(res => {
-      console.log(res)
-      dispatch({type:SET_QUIZ_INTO_STATE, payload: res.data})
+      dispatch(setQuiz(res.data))
     })
     .catch(err => {
       dispatch(console.log({err}))
@@ -53,8 +50,16 @@ export function fetchQuiz() {
     // - Dispatch an action to send the obtained quiz to its state
   }
 }
-export function postAnswer() {
+export function postAnswer(answer) {
   return function (dispatch) {
+    axios.post('http://localhost:9000/api/quiz/answer', answer)
+    .then(res => {
+      dispatch({type:SET_INFO_MESSAGE, payload: res.data.message})
+    })
+    .catch(err => {
+      dispatch({type:SET_INFO_MESSAGE, payload: 'What a shame! that was the incorrect answer'})
+      console.log({err})
+    })
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
@@ -62,20 +67,19 @@ export function postAnswer() {
   }
 }
 //form
-export function postQuiz() {
+export function postQuiz(newQuiz) {
+
   return function (dispatch) {
-    const newQuiz = {
-      question_text: '' ,
-      true_answer_text: '',
-      false_answer_text: ''
-    }
-    axios.post('http://localhost:9000/api/quiz/answer', newQuiz)
+    axios.post('http://localhost:9000/api/quiz/new', newQuiz )
     .then(res => {
-      debugger    
+      dispatch({type: SET_INFO_MESSAGE, payload:`Congrats: "${res.data.question}?" is a great question!`})
+      dispatch({type:RESET_FORM})
+      console.log(res)    
     })
     .catch(err => {
+      console.log({err})
       dispatch({type:SET_INFO_MESSAGE, payload: err.response.data.message})
-      dispatch({type:RESET_FORM})
+      dispatch(resetForm)
     })
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
