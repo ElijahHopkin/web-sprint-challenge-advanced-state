@@ -30,17 +30,21 @@ export function wheel(state = initialWheelState, action) {
   }
 }
 
-const initialQuizState = null
+const initialQuizState = []
 export function quiz(state = initialQuizState, action) {
   switch(action.type) {
+    case SET_QUIZ_INTO_STATE:
+      return action.payload
     default:
       return state
   }
 }
 
-const initialSelectedAnswerState = null
+const initialSelectedAnswerState = []
 export function selectedAnswer(state = initialSelectedAnswerState, action) {
   switch(action.type) {
+    case SET_SELECTED_ANSWER:
+      return action.payload
     default:
       return state
   }
@@ -49,11 +53,14 @@ export function selectedAnswer(state = initialSelectedAnswerState, action) {
 const initialMessageState = ''
 export function infoMessage(state = initialMessageState, action) {
   switch(action.type) {
+    case SET_INFO_MESSAGE:
+      return action.payload;
     default:
       return state
   }
 }
 
+//form
 const initialFormState = {
   newQuestion: '',
   newTrueAnswer: '',
@@ -61,6 +68,11 @@ const initialFormState = {
 }
 export function form(state = initialFormState, action) {
   switch(action.type) {
+    case INPUT_CHANGE:
+      return ({
+        ...state,
+        [action.payload.name]: action.payload.value
+      })
     default:
       return state
   }
