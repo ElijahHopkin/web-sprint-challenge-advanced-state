@@ -54,10 +54,10 @@ export function postAnswer(answer) {
   return function (dispatch) {
     axios.post('http://localhost:9000/api/quiz/answer', answer)
     .then(res => {
-      dispatch({type:SET_INFO_MESSAGE, payload: res.data.message})
+      dispatch(setMessage(res.data.message))
     })
     .catch(err => {
-      dispatch({type:SET_INFO_MESSAGE, payload: 'What a shame! that was the incorrect answer'})
+      dispatch(setMessage('What a shame! that was the incorrect answer'))
       console.log({err})
     })
     // On successful POST:
@@ -70,16 +70,17 @@ export function postAnswer(answer) {
 export function postQuiz(newQuiz) {
 
   return function (dispatch) {
-    axios.post('http://localhost:9000/api/quiz/new', newQuiz )
+    axios
+    .post('http://localhost:9000/api/quiz/new', newQuiz )
     .then(res => {
-      dispatch({type: SET_INFO_MESSAGE, payload:`Congrats: "${res.data.question}" is a great question!`})
-      dispatch({type:RESET_FORM})
+      dispatch(setMessage(`Congrats: "${res.data.question}" is a great question!`))
+      dispatch(resetForm())
       console.log(res)    
     })
     .catch(err => {
       console.log({err})
-      dispatch({type:SET_INFO_MESSAGE, payload: err.response.data.message})
-      dispatch(resetForm)
+      dispatch(setMessage(err.response.data.message))
+      dispatch(resetForm())
     })
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
