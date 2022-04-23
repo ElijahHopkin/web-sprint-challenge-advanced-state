@@ -3,9 +3,15 @@ import {connect} from 'react-redux'
 
 import {fetchQuiz, selectAnswer, postAnswer} from '../state/action-creators'
 
+
+const randomId = Math.floor(Math.random()*2)
+  console.log(randomId)
+  const answer2Id = Math.abs(randomId - 1)
+console.log('2:', answer2Id)
+
+
 function Quiz(props) {
   const {fetchQuiz, selectAnswer, postAnswer, quiz, selectedAnswer} = props
-  console.log(quiz)
   
   const [disabled, setDisabled] = useState(true)
   
@@ -37,7 +43,14 @@ function Quiz(props) {
     })
     fetchQuiz()
   }
- 
+  // let randomId = 0;
+  // let answer2Id = 1
+  useEffect(() => {
+  }, [])
+  
+  
+// console.log(props)
+  
 
   return (
     <div id="wrapper">
@@ -48,17 +61,17 @@ function Quiz(props) {
             <h2>{quiz.question}</h2>
                               
             <div id="quizAnswers">
-              <div className= {`answer ${selectedAnswer?.answer_id===quiz.answers[0].answer_id? 'selected': ''}`}>
-               {quiz.answers[0].text}
-                <button onClick = {() => answerChoice(quiz.answers[0])}>
-                  {selectedAnswer?.answer_id===quiz.answers[0].answer_id? 'SELECTED': 'Select'}
+              <div className= {`answer ${selectedAnswer?.answer_id===quiz.answers[randomId].answer_id? 'selected': ''}`}>
+               {quiz.answers[randomId].text}
+                <button onClick = {() => answerChoice(quiz.answers[randomId])}>
+                  {selectedAnswer?.answer_id===quiz.answers[randomId].answer_id? 'SELECTED': 'Select'}
                 </button>
               </div>
 
-              <div className={`${selectedAnswer?.answer_id ===quiz.answers[1].answer_id? 'answer selected': 'answer'}`}>
-              {quiz.answers[1].text}
-                <button onClick = {() => answerChoice(quiz.answers[1])}>
-                {selectedAnswer?.answer_id===quiz.answers[1].answer_id? 'SELECTED': 'Select'}
+              <div className={`${selectedAnswer?.answer_id ===quiz.answers[answer2Id].answer_id? 'answer selected': 'answer'}`}>
+              {quiz.answers[answer2Id].text}
+                <button onClick = {() => answerChoice(quiz.answers[answer2Id])}>
+                {selectedAnswer?.answer_id===quiz.answers[answer2Id].answer_id? 'SELECTED': 'Select'}
                 </button>
               </div>
             </div>

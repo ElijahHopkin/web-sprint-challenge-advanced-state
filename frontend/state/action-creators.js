@@ -68,7 +68,6 @@ export function postAnswer(answer) {
 }
 //form
 export function postQuiz(newQuiz) {
-
   return function (dispatch) {
     axios
     .post('http://localhost:9000/api/quiz/new', newQuiz )

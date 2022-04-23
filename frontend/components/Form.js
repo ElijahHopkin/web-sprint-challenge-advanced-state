@@ -4,7 +4,6 @@ import * as actionCreators from '../state/action-creators'
 
 export function Form(props) {
   const {postQuiz, inputChange, form} = props
-  console.log(props.form)
 
   const [disabled, setDisabled] = useState(true)
 
