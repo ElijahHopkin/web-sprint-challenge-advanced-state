@@ -30,7 +30,7 @@ export function wheel(state = initialWheelState, action) {
   }
 }
 
-const initialQuizState = []
+const initialQuizState = null
 export function quiz(state = initialQuizState, action) {
   switch(action.type) {
     case SET_QUIZ_INTO_STATE:

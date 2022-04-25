@@ -1,23 +1,27 @@
 import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 
-import {fetchQuiz, selectAnswer, postAnswer} from '../state/action-creators'
+import {fetchQuiz, selectAnswer, postAnswer, setMessage} from '../state/action-creators'
 
 
-const randomId = Math.floor(Math.random()*2)
-  console.log(randomId)
+  const randomId = Math.floor(Math.random()*2)
   const answer2Id = Math.abs(randomId - 1)
-console.log('2:', answer2Id)
 
 
 function Quiz(props) {
-  const {fetchQuiz, selectAnswer, postAnswer, quiz, selectedAnswer} = props
+  const {fetchQuiz, selectAnswer, postAnswer, setMessage, quiz, selectedAnswer} = props
   
   const [disabled, setDisabled] = useState(true)
   
   useEffect(() => {
-    fetchQuiz()
+    if(!quiz){
+      fetchQuiz()
+
+    }
+
   }, [])
+  console.log(quiz)
+
 
   useEffect(() => {
     disableHandler()
@@ -25,6 +29,7 @@ function Quiz(props) {
 
   const answerChoice = (answer) => {
     selectAnswer(answer)
+    setMessage('')
   }
   
   const disableHandler = () => {
@@ -43,10 +48,6 @@ function Quiz(props) {
     })
     fetchQuiz()
   }
-  // let randomId = 0;
-  // let answer2Id = 1
-  useEffect(() => {
-  }, [])
   
   
 // console.log(props)
@@ -56,7 +57,7 @@ function Quiz(props) {
     <div id="wrapper">
       {
         // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
-        quiz.answers ? (
+        quiz ? (
           <>
             <h2>{quiz.question}</h2>
                               
@@ -89,8 +90,8 @@ const mapStateToProps = state => {
   // console.log(state)
   return{
     quiz: state.quiz,
-    selectedAnswer: state.selectedAnswer
+    selectedAnswer: state.selectedAnswer,
   }
 }
 
-export default connect (mapStateToProps, {fetchQuiz, selectAnswer, postAnswer})(Quiz)
+export default connect (mapStateToProps, {fetchQuiz, selectAnswer, postAnswer,setMessage})(Quiz)
