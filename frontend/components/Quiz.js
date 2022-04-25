@@ -29,7 +29,6 @@ function Quiz(props) {
 
   const answerChoice = (answer) => {
     selectAnswer(answer)
-    setMessage('')
   }
   
   const disableHandler = () => {
@@ -46,7 +45,6 @@ function Quiz(props) {
       quiz_id: quiz.quiz_id,
       answer_id: selectedAnswer.answer_id
     })
-    fetchQuiz()
   }
   
   
